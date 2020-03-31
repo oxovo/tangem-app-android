@@ -9,9 +9,6 @@ import com.tangem.common.tlv.TlvMapper
 import com.tangem.common.tlv.TlvTag
 import com.tangem.tasks.TaskError
 
-/**
- * Created by Anton Zhilenkov on 2020-02-22.
- */
 class ReadUserDataResponse(
     /**
      * CID, Unique Tangem card ID number.
