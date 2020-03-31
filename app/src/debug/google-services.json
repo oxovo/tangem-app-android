@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "836821968186",
+    "firebase_url": "https://tangem-dev.firebaseio.com",
+    "project_id": "tangem-dev",
+    "storage_bucket": "tangem-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836821968186:android:ed9ba0d4dcd1dadddf5c03",
+        "android_client_info": {
+          "package_name": "com.tangem.wallet.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836821968186-gae0havcd25ijomdavnm87gegflor9g5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY9uVEQL6UN0XeiKHhqji62Ge2BYjZBEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836821968186-gae0havcd25ijomdavnm87gegflor9g5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
