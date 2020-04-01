@@ -8,10 +8,10 @@ import com.tangem.tangemtest.ucase.domain.paramsManager.ActionCallback
 /**
  * Created by Anton Zhilenkov on 19/03/2020.
  */
-class ScanParamsManager : BaseParamsManager(ScanAction()) {
-    override fun createParamsList(): List<Item> = listOf()
+class ScanItemsManager : BaseItemsManager(ScanAction()) {
+    override fun createItemsList(): List<Item> = listOf()
 
     override fun invokeMainAction(cardManager: CardManager, callback: ActionCallback) {
-        action.executeMainAction(getAttrsForAction(cardManager), callback)
+        action.executeMainAction(this, getAttrsForAction(cardManager), callback)
     }
 }

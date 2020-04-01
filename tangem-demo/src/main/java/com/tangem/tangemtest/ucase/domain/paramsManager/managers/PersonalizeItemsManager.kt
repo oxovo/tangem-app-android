@@ -10,12 +10,12 @@ import com.tangem.tangemtest.ucase.variants.TlvId
 /**
  * Created by Anton Zhilenkov on 19/03/2020.
  */
-class PersonalizeParamsManager : BaseParamsManager(PersonalizeAction()) {
-    override fun createParamsList(): List<Item> {
+class PersonalizeItemsManager : BaseItemsManager(PersonalizeAction()) {
+    override fun createItemsList(): List<Item> {
         return listOf(EditTextItem(TlvId.CardId))
     }
 
     override fun invokeMainAction(cardManager: CardManager, callback: ActionCallback) {
-        action.executeMainAction(getAttrsForAction(cardManager), callback)
+        action.executeMainAction(this, getAttrsForAction(cardManager), callback)
     }
 }
