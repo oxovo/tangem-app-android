@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import com.tangem.tangemtest.R
 import com.tangem.tangemtest.ucase.resources.ActionType
 import com.tangem.tangemtest.ucase.ui.BaseCardActionFragment
-import com.tangem.tangemtest.ucase.ui.BaseCardResponseFragment
+import com.tangem.tangemtest.ucase.ui.response.BaseCardResponseFragment
 
 /**
  * Created by Anton Zhilenkov on 10.03.2020.
