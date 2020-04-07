@@ -17,7 +17,7 @@ import ru.dev.gbixahue.eu4d.lib.android.global.log.Log
 /**
  * Created by Anton Zhilenkov on 19/03/2020.
  */
-class PersonalizeFragment : BaseCardActionFragment(), ActionView {
+class PersonalizeFragment : BaseCardActionFragment() {
 
     override fun getLayoutId(): Int = R.layout.fg_personalize
 
