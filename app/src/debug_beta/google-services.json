@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "784419083193",
+    "firebase_url": "https://tangem-beta.firebaseio.com",
+    "project_id": "tangem-beta",
+    "storage_bucket": "tangem-beta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784419083193:android:f04b7f2c1461ac6e4cdc68",
+        "android_client_info": {
+          "package_name": "com.tangem.wallet.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "784419083193-sliskt5p9kfr6glv3hrsnrb9o56flqff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqW0qGNLZ4b0TbauZrDnc96g3FIwKOqqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "784419083193-sliskt5p9kfr6glv3hrsnrb9o56flqff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
