@@ -10,7 +10,7 @@ import ru.dev.gbixahue.eu4d.lib.kotlin.common.TypedHolder
 /**
  * Created by Anton Zhilenkov on 19/03/2020.
  */
-class PersonalizeResources() {
+class PersonalizationResources() {
     fun init(holder: ResourceHolder<Id>) {
         initBlock(holder)
         initCardNumber(holder)

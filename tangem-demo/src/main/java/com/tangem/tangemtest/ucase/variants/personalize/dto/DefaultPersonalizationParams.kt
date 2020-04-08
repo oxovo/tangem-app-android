@@ -9,7 +9,7 @@ import com.tangem.common.KeyPair
  * Created by Anton Zhilenkov on 27/03/2020.
  */
 
-interface DefaultPersonalizeParams {
+interface DefaultPersonalizationParams {
     companion object {
 
         fun issuer(): Issuer {
