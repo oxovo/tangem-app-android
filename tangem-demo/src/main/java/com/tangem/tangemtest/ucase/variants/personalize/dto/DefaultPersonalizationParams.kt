@@ -1,9 +1,9 @@
 package com.tangem.tangemtest.ucase.variants.personalize.dto
 
+import com.tangem.KeyPair
 import com.tangem.commands.personalization.entities.Acquirer
 import com.tangem.commands.personalization.entities.Issuer
 import com.tangem.commands.personalization.entities.Manufacturer
-import com.tangem.common.KeyPair
 
 /**
  * Created by Anton Zhilenkov on 27/03/2020.
