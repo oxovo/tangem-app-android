@@ -1,8 +1,5 @@
 package com.tangem.tangem_sdk_new.extensions
 
-/**
- * Created by Anton Zhilenkov on 31/03/2020.
- */
 fun <T> List<T>.print(delimiter: String = ", ", wrap: Boolean = true): String {
     val builder = StringBuilder()
     forEach { builder.append(it).append(delimiter) }
