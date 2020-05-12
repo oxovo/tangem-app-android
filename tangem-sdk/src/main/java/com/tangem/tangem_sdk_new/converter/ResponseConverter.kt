@@ -1,9 +1,9 @@
-package com.tangem.devkit.ucase.domain.responses
+package com.tangem.tangem_sdk_new.converter
 
 import com.google.gson.*
 import com.tangem.commands.*
 import com.tangem.common.extensions.toHexString
-import com.tangem.devkit.extensions.print
+import com.tangem.tangem_sdk_new.extensions.print
 import java.lang.reflect.Type
 import java.text.DateFormat
 import java.util.*
@@ -11,7 +11,7 @@ import java.util.*
 /**
  * Created by Anton Zhilenkov on 31/03/2020.
  */
-class ResponseJsonConverter {
+class ResponseConverter {
 
     val gson: Gson by lazy { init() }
 
