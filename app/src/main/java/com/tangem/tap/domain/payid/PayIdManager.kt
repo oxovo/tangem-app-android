@@ -1,7 +1,8 @@
-package com.tangem.tap.domain
+package com.tangem.tap.domain.payid
 
 import com.tangem.blockchain.common.Blockchain
 import com.tangem.commands.common.network.Result
+import com.tangem.tap.domain.TapError
 import com.tangem.tap.network.payid.PayIdService
 import com.tangem.tap.network.payid.PayIdVerifyService
 import com.tangem.tap.network.payid.SetPayIdResponse

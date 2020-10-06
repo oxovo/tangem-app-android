@@ -18,9 +18,9 @@ import com.tangem.tap.common.extensions.copyToClipboard
 import com.tangem.tap.common.redux.AppState
 import com.tangem.tap.common.redux.navigation.AppScreen
 import com.tangem.tap.common.redux.navigation.NavigationAction
-import com.tangem.tap.domain.PayIdManager
 import com.tangem.tap.domain.TapError
 import com.tangem.tap.domain.extensions.toSendableAmounts
+import com.tangem.tap.domain.payid.PayIdManager
 import com.tangem.tap.features.send.redux.PrepareSendScreen
 import com.tangem.tap.features.wallet.models.toPendingTransactions
 import com.tangem.tap.network.NetworkConnectivity

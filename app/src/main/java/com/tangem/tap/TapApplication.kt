@@ -1,6 +1,7 @@
 package com.tangem.tap
 
 import android.app.Application
+import android.content.Context
 import com.tangem.tap.common.images.PicassoHelper
 import com.tangem.tap.common.redux.AppState
 import com.tangem.tap.common.redux.appReducer
@@ -16,10 +17,13 @@ val store = Store(
         state = AppState()
 )
 lateinit var preferencesStorage: PreferencesStorage
+lateinit var appContext: Context
 
 class TapApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        appContext = applicationContext
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

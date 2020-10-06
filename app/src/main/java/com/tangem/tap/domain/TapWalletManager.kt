@@ -11,6 +11,8 @@ import com.tangem.tap.common.redux.global.FiatCurrencyName
 import com.tangem.tap.common.redux.global.GlobalAction
 import com.tangem.tap.domain.extensions.amountToCreateAccount
 import com.tangem.tap.domain.extensions.isNoAccountError
+import com.tangem.tap.domain.payid.PayIdManager
+import com.tangem.tap.domain.payid.isPayIdSupported
 import com.tangem.tap.domain.tasks.ScanNoteResponse
 import com.tangem.tap.features.wallet.redux.PayIdState
 import com.tangem.tap.features.wallet.redux.WalletAction

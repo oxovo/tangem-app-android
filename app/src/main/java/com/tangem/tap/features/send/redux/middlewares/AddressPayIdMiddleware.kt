@@ -3,8 +3,8 @@ package com.tangem.tap.features.send.redux.middlewares
 import com.tangem.blockchain.common.Wallet
 import com.tangem.commands.common.network.Result
 import com.tangem.tap.common.redux.AppState
-import com.tangem.tap.domain.PayIdManager
-import com.tangem.tap.domain.isPayIdSupported
+import com.tangem.tap.domain.payid.PayIdManager
+import com.tangem.tap.domain.payid.isPayIdSupported
 import com.tangem.tap.features.send.redux.AddressPayIdActionUi
 import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction
 import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.AddressVerification.SetAddressError
