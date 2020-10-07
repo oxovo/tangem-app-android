@@ -6,8 +6,6 @@ import android.security.KeyPairGeneratorSpec
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import timber.log.Timber
 import java.math.BigInteger
 import java.security.KeyPairGenerator
@@ -104,24 +102,24 @@ class RsaEncryptedStorage(context: Context, val storageName: String) : Encrypted
     private fun getCipher(): Cipher = Cipher.getInstance("PKCS1Padding")
 }
 
-class AndroidEncryptedStorage(context: Context, val storageName: String) : EncryptedStorage {
-    private val encryptedSharedPrefs: SharedPreferences = init(context)
-
-    private fun init(context: Context): SharedPreferences {
-        return EncryptedSharedPreferences.create(
-                storageName,
-                MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
-                context,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
-
-    override fun save(key: String, data: String) {
-        encryptedSharedPrefs.edit().putString(key, data).apply()
-    }
-
-    override fun restore(key: String, def: String?): String? {
-        return encryptedSharedPrefs.getString(key, def)
-    }
-}
+//class AndroidEncryptedStorage(context: Context, val storageName: String) : EncryptedStorage {
+//    private val encryptedSharedPrefs: SharedPreferences = init(context)
+//
+//    private fun init(context: Context): SharedPreferences {
+//        return EncryptedSharedPreferences.create(
+//                storageName,
+//                MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+//                context,
+//                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//        )
+//    }
+//
+//    override fun save(key: String, data: String) {
+//        encryptedSharedPrefs.edit().putString(key, data).apply()
+//    }
+//
+//    override fun restore(key: String, def: String?): String? {
+//        return encryptedSharedPrefs.getString(key, def)
+//    }
+//}

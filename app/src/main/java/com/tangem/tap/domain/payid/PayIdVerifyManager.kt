@@ -14,8 +14,8 @@ import com.tangem.tap.common.extensions.fromBase64Url
 import com.tangem.tap.common.extensions.toBase64Url
 import com.tangem.tap.network.payid.SignedPayIdSignature
 import com.tangem.tap.network.payid.VerifiedPayId
-import com.tangem.tap.persistence.AndroidEncryptedStorage
 import com.tangem.tap.persistence.EncryptedStorage
+import com.tangem.tap.persistence.RsaEncryptedStorage
 import timber.log.Timber
 import java.util.*
 
@@ -97,7 +97,7 @@ class PayIdVerifyManager(
 
     companion object {
         fun create(context: Context): PayIdVerifyManager {
-            val encryptedStorage = AndroidEncryptedStorage(context, "jwkStorage")
+            val encryptedStorage = RsaEncryptedStorage(context, "jwkStorage")
             val jwkRepository = EcJwkRepository(encryptedStorage)
             return PayIdVerifyManager(jwkRepository)
         }
