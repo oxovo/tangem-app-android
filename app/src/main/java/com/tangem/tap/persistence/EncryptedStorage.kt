@@ -99,7 +99,7 @@ class RsaEncryptedStorage(context: Context, val storageName: String) : Encrypted
 
     private fun getKeyStore(): KeyStore = KeyStore.getInstance(KEY_STORE).apply { load(null) }
 
-    private fun getCipher(): Cipher = Cipher.getInstance("PKCS1Padding")
+    private fun getCipher(): Cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
 }
 
 //class AndroidEncryptedStorage(context: Context, val storageName: String) : EncryptedStorage {
