@@ -34,6 +34,11 @@ class RsaEncryptedStorage(context: Context, val storageName: String) : Encrypted
     }
 
     private fun generateKeyPair(context: Context) {
+        if (getKeyStore().containsAlias(storageName)) {
+            isInitialized = true
+            return
+        }
+
         val start = Calendar.getInstance()
         val end = Calendar.getInstance()
         end.add(Calendar.YEAR, 25)
@@ -47,25 +52,25 @@ class RsaEncryptedStorage(context: Context, val storageName: String) : Encrypted
                     .setEndDate(end.time)
                     .build()
         } else {
-            KeyGenParameterSpec.Builder(storageName, KeyProperties.PURPOSE_DECRYPT)
-                    .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+            KeyGenParameterSpec.Builder(storageName, KeyProperties.PURPOSE_DECRYPT or KeyProperties.PURPOSE_ENCRYPT)
+                    .setDigests(KeyProperties.DIGEST_SHA256)
                     .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                     .build()
         }
 
-        try {
+        isInitialized = try {
             val kpGenerator = KeyPairGenerator.getInstance("RSA", KEY_STORE)
             kpGenerator.initialize(spec)
             kpGenerator.generateKeyPair()
-            isInitialized = true
-        } catch (ex: java.lang.Exception) {
-            isInitialized = false
+            true
+        } catch (ex: Exception) {
+            false
         }
     }
 
     override fun save(key: String, data: String) {
         if (!isInitialized) {
-            Timber.e("Can't save data, because thestorage is not initialized properly")
+            Timber.e("Can't save data, because the storage is not initialized properly")
             return
         }
 
