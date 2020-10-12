@@ -8,6 +8,7 @@ import com.tangem.tap.common.redux.ErrorAction
 import com.tangem.tap.common.redux.NotificationAction
 import com.tangem.tap.common.redux.global.CryptoCurrencyName
 import com.tangem.tap.domain.TapError
+import com.tangem.tap.network.payid.PayIdDataResponse
 import com.tangem.wallet.R
 import org.rekotlin.Action
 import java.math.BigDecimal
@@ -44,10 +45,15 @@ sealed class WalletAction : Action {
         object Failure : WalletAction()
     }
 
-    object LoadPayId : WalletAction() {
+    object LoadPayIdAddress : WalletAction() {
         data class Success(val payId: String) : WalletAction()
         object NotCreated : WalletAction()
         object Failure : WalletAction()
+    }
+
+    object LoadUserPayId: WalletAction(){
+        data class Success(val payIdData: PayIdDataResponse) : WalletAction()
+        data class Failure(override val error: TapError) : WalletAction(), ErrorAction
     }
 
     data class LoadArtwork(val card: Card, val artworkId: String?) : WalletAction() {
@@ -65,11 +71,16 @@ sealed class WalletAction : Action {
         data class CompleteCreatingPayId(val payId: String) : WalletAction()
         data class Success(val payId: String) : WalletAction()
         object EmptyField : WalletAction(), ErrorAction {
-            override val error = TapError.PayIdEmptyField
+            override val error = TapError.PayId.EmptyField
         }
 
         class Failure(override val error: TapError) : WalletAction(), ErrorAction
         object Cancel : WalletAction()
+    }
+
+    object PayIdDetail : WalletAction() {
+        object Show : WalletAction()
+        object Hide : WalletAction()
     }
 
     data class CopyAddress(val context: Context) : WalletAction() {

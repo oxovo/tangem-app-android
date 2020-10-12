@@ -142,18 +142,20 @@
                 android:id="@+id/tv_payid_address"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:drawablePadding="12dp"
                 android:ellipsize="middle"
                 android:padding="16dp"
                 android:singleLine="true"
+                android:textAlignment="textEnd"
                 android:textColor="@color/darkGray1"
                 android:textSize="13sp"
+                android:visibility="gone"
+                app:drawableEndCompat="@drawable/ic_angle_bracket_right"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@id/iv_payid_icon"
-                android:textAlignment="textEnd"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/v_payid_divider"
-                tools:text="roman$payid.tangem.com"
-                android:visibility="gone"/>
+                tools:text="roman$payid.tangem.com" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_payid"

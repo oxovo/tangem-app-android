@@ -15,6 +15,7 @@ import com.tangem.tap.features.wallet.models.toPendingTransactions
 import com.tangem.tap.features.wallet.ui.BalanceStatus
 import com.tangem.tap.features.wallet.ui.BalanceWidgetData
 import com.tangem.tap.features.wallet.ui.TokenData
+import com.tangem.tap.network.payid.PayIdDataResponse
 import com.tangem.tap.store
 import org.rekotlin.Action
 
@@ -170,11 +171,26 @@ private fun internalReduce(action: Action, state: AppState): WalletState {
         is WalletAction.HideDialog -> {
             newState = newState.copy(walletDialog = null)
         }
-        is WalletAction.LoadPayId.Success -> newState = newState.copy(
-                payIdData = PayIdData(PayIdState.Created, action.payId)
+        is WalletAction.LoadPayIdAddress.Success -> {
+            val verifyManager = state.globalState.payIdVerifyManager ?: return newState
+            val verifiedPayId = PayIdDataResponse.sergio()
+            val thumbprintRepresentation = verifyManager.getThumbprintRepresentation(verifiedPayId.verifiedAddresses[0])
+            newState = newState.copy(
+                    payIdData = PayIdData(PayIdState.Created, action.payId, verifiedPayId, thumbprintRepresentation)
+            )
+        }
+        is WalletAction.LoadPayIdAddress.NotCreated -> newState = newState.copy(
+                payIdData = PayIdData(PayIdState.NotCreated, null, null, null)
         )
-        is WalletAction.LoadPayId.NotCreated -> newState = newState.copy(
-                payIdData = PayIdData(PayIdState.NotCreated, null)
+        is WalletAction.LoadUserPayId.Success -> {
+            val verifyManager = state.globalState.payIdVerifyManager ?: return newState
+            val thumbprintRepresentation = verifyManager.getThumbprintRepresentation(action.payIdData.verifiedAddresses[0])
+            newState = newState.copy(
+                    payIdData = PayIdData(PayIdState.Created, action.payIdData.payId, action.payIdData, thumbprintRepresentation)
+            )
+        }
+        is WalletAction.LoadUserPayId.Failure -> newState = newState.copy(
+                payIdData = PayIdData(payIdDataResponse = null, thumbprintRepresentation = null)
         )
         is WalletAction.CreatePayId, is WalletAction.CreatePayId.Failure ->
             newState = newState.copy(
@@ -200,6 +216,11 @@ private fun internalReduce(action: Action, state: AppState): WalletState {
             newState = newState.copy(hashesCountVerified = false)
         is WalletAction.ConfirmHashesCount ->
             newState = newState.copy(hashesCountVerified = true)
+        is WalletAction.PayIdDetail.Show -> {
+            val userPayId = newState.payIdData.payIdDataResponse ?: return newState
+            newState = newState.copy(walletDialog = WalletDialog.PayIdDetailDialog(userPayId))
+        }
+        is WalletAction.PayIdDetail.Hide -> newState = newState.copy(walletDialog = null)
     }
     return newState
 }

@@ -14,7 +14,7 @@ import com.tangem.tap.features.send.redux.AmountActionUi
 import com.tangem.tap.features.send.redux.FeeAction.RequestFee
 import com.tangem.tap.features.send.redux.SendAction
 import com.tangem.tap.features.send.redux.SendActionUi
-import com.tangem.tap.features.send.redux.states.SendButtonState
+import com.tangem.tap.features.send.redux.states.ButtonState
 import com.tangem.tap.features.wallet.redux.WalletAction
 import com.tangem.tap.scope
 import com.tangem.tap.tangemSdk
@@ -61,7 +61,7 @@ private fun verifyAndSendTransaction(
         return
     }
 
-    dispatch(SendAction.ChangeSendButtonState(SendButtonState.PROGRESS))
+    dispatch(SendAction.ChangeSendButtonState(sendState = ButtonState.PROGRESS))
     val txData = walletManager.createTransaction(amountToSend, feeAmount, recipientAddress)
     scope.launch {
         walletManager.update()
@@ -106,7 +106,7 @@ private fun verifyAndSendTransaction(
                     }
                 }
             }
-            dispatch(SendAction.ChangeSendButtonState(SendButtonState.ENABLED))
+            dispatch(SendAction.ChangeSendButtonState(sendState = ButtonState.ENABLED))
         }
     }
 

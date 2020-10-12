@@ -9,7 +9,6 @@ import com.tangem.blockchain.common.SignatureCountValidator
 import com.tangem.blockchain.common.Wallet
 import com.tangem.blockchain.extensions.SimpleResult
 import com.tangem.commands.Card
-import com.tangem.commands.common.network.Result
 import com.tangem.common.CompletionResult
 import com.tangem.common.extensions.CardType
 import com.tangem.common.extensions.getType
@@ -18,9 +17,7 @@ import com.tangem.tap.common.extensions.copyToClipboard
 import com.tangem.tap.common.redux.AppState
 import com.tangem.tap.common.redux.navigation.AppScreen
 import com.tangem.tap.common.redux.navigation.NavigationAction
-import com.tangem.tap.domain.TapError
 import com.tangem.tap.domain.extensions.toSendableAmounts
-import com.tangem.tap.domain.payid.PayIdManager
 import com.tangem.tap.features.send.redux.PrepareSendScreen
 import com.tangem.tap.features.wallet.models.toPendingTransactions
 import com.tangem.tap.network.NetworkConnectivity
@@ -46,9 +43,14 @@ val walletMiddleware: Middleware<AppState> = { dispatch, state ->
                         store.state.globalState.tapWalletManager.loadWalletData()
                     }
                 }
-                is WalletAction.LoadPayId -> {
+                is WalletAction.LoadPayIdAddress -> {
                     scope.launch {
-                        store.state.globalState.tapWalletManager.loadPayId()
+                        store.state.globalState.payIdManager.loadPayIdAddress()
+                    }
+                }
+                is WalletAction.LoadUserPayId -> {
+                    scope.launch {
+//                        store.state.globalState.payIdManager.
                     }
                 }
                 is WalletAction.LoadFiatRate -> {
@@ -77,30 +79,7 @@ val walletMiddleware: Middleware<AppState> = { dispatch, state ->
                     store.dispatch(WalletAction.CheckHashesCountOnline)
                     if (!store.state.walletState.updatingWallet) setupWalletUpdate(action.wallet)
                 }
-                is WalletAction.CreatePayId.CompleteCreatingPayId -> {
-                    scope.launch {
-                        val cardId = store.state.globalState.scanNoteResponse?.card?.cardId
-                        val wallet = store.state.globalState.scanNoteResponse?.walletManager?.wallet
-                        val publicKey = store.state.globalState.scanNoteResponse?.card?.cardPublicKey
-                        if (cardId != null && wallet != null && publicKey != null) {
-                            val result = PayIdManager().setPayId(
-                                    cardId, publicKey.toHexString(),
-                                    action.payId, wallet.address, wallet.blockchain
-                            )
-                            withContext(Dispatchers.Main) {
-                                when (result) {
-                                    is Result.Success ->
-                                        store.dispatch(WalletAction.CreatePayId.Success(action.payId))
-                                    is Result.Failure -> {
-                                        val error = result.error as? TapError
-                                                ?: TapError.PayIdCreatingError
-                                        store.dispatch(WalletAction.CreatePayId.Failure(error))
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                is WalletAction.CreatePayId.CompleteCreatingPayId -> completeCreatingPayId(action)
                 is WalletAction.Scan -> {
                     scope.launch {
                         val result = tangemSdkManager.scanNote()
@@ -176,6 +155,19 @@ private fun setupWalletUpdate(wallet: Wallet) {
     }
 }
 
+private fun completeCreatingPayId(action: WalletAction.CreatePayId.CompleteCreatingPayId) {
+    val payIdVerifyManager = store.state.globalState.payIdVerifyManager ?: return
+    val scanNoteResponse = store.state.globalState.scanNoteResponse ?: return
+    val wallet = scanNoteResponse.walletManager?.wallet ?: return
+    val publicKey = scanNoteResponse.card.cardPublicKey ?: return
+    val cardId = scanNoteResponse.card.cardId
+    val payManager = store.state.globalState.payIdManager
+
+    scope.launch {
+        payManager.createPayId(cardId, publicKey.toHexString(), action.payId, wallet.address, wallet.blockchain)
+    }
+}
+
 
 private fun prepareSendAction(amount: Amount?): Action {
     return if (amount != null) {
@@ -238,3 +230,4 @@ private fun checkHashesCountOnline() {
         }
     }
 }
+

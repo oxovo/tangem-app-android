@@ -53,7 +53,7 @@ class AmountMiddleware {
         val inputCrypto = sendState.amountState.amountToSendCrypto
         if (sendState.amountState.viewAmountValue.value == "0" && inputCrypto.isZero()) {
             dispatch(ReceiptAction.RefreshReceipt)
-            dispatch(SendAction.ChangeSendButtonState(sendState.getButtonState()))
+            dispatch(SendAction.ChangeSendButtonState(sendState = sendState.getButtonState()))
             return
         }
 
@@ -72,7 +72,7 @@ class AmountMiddleware {
             }
         }
         dispatch(ReceiptAction.RefreshReceipt)
-        dispatch(SendAction.ChangeSendButtonState(sendState.getButtonState()))
+        dispatch(SendAction.ChangeSendButtonState(sendState = sendState.getButtonState()))
     }
 
     private fun setMaxAmount(appState: AppState?, dispatch: (Action) -> Unit) {

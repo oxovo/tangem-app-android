@@ -4,17 +4,12 @@ import com.tangem.blockchain.common.Wallet
 import com.tangem.blockchain.common.WalletManager
 import com.tangem.commands.CardStatus
 import com.tangem.commands.common.network.Result
-import com.tangem.common.extensions.toHexString
-import com.tangem.tap.TapConfig
 import com.tangem.tap.common.redux.global.CryptoCurrencyName
 import com.tangem.tap.common.redux.global.FiatCurrencyName
 import com.tangem.tap.common.redux.global.GlobalAction
 import com.tangem.tap.domain.extensions.amountToCreateAccount
 import com.tangem.tap.domain.extensions.isNoAccountError
-import com.tangem.tap.domain.payid.PayIdManager
-import com.tangem.tap.domain.payid.isPayIdSupported
 import com.tangem.tap.domain.tasks.ScanNoteResponse
-import com.tangem.tap.features.wallet.redux.PayIdState
 import com.tangem.tap.features.wallet.redux.WalletAction
 import com.tangem.tap.network.NetworkConnectivity
 import com.tangem.tap.network.coinmarketcap.CoinMarketCapService
@@ -25,7 +20,6 @@ import java.math.BigDecimal
 
 
 class TapWalletManager {
-    private val payIdManager = PayIdManager()
     private val coinMarketCapService = CoinMarketCapService()
 
     suspend fun loadWalletData() {
@@ -35,11 +29,6 @@ class TapWalletManager {
             return
         }
         loadWallet(walletManager)
-    }
-
-    suspend fun loadPayId() {
-        val result = loadPayIdIfNeeded()
-        result?.let { handlePayIdResult(it) }
     }
 
     suspend fun updateWallet() {
@@ -99,7 +88,7 @@ class TapWalletManager {
                 store.dispatch(WalletAction.LoadWallet)
                 store.dispatch(WalletAction.LoadArtwork(data.card, artworkId))
                 store.dispatch(WalletAction.LoadFiatRate)
-                store.dispatch(WalletAction.LoadPayId)
+                store.dispatch(WalletAction.LoadPayIdAddress)
             } else if (data.card.status == CardStatus.Empty) {
                 store.dispatch(WalletAction.EmptyWallet)
                 store.dispatch(WalletAction.LoadArtwork(data.card, artworkId))
@@ -136,38 +125,6 @@ class TapWalletManager {
                     }
                     store.dispatch(WalletAction.LoadWallet.Failure(result.error?.localizedMessage))
                 }
-            }
-        }
-    }
-
-
-    private suspend fun loadPayIdIfNeeded(): Result<String?>? {
-        val scanNoteResponse = store.state.globalState.scanNoteResponse
-        if (!TapConfig.usePayId ||
-                store.state.walletState.payIdData.payIdState == PayIdState.Disabled ||
-                scanNoteResponse?.walletManager?.wallet?.blockchain?.isPayIdSupported() == false) {
-            return null
-        }
-        val cardId = scanNoteResponse?.card?.cardId
-        val publicKey = scanNoteResponse?.card?.cardPublicKey
-        if (cardId == null || publicKey == null) {
-            return null
-        }
-        return payIdManager.getPayId(cardId, publicKey.toHexString())
-    }
-
-    private suspend fun handlePayIdResult(result: Result<String?>) {
-        withContext(Dispatchers.Main) {
-            when (result) {
-                is Result.Success -> {
-                    val payId = result.data
-                    if (payId == null) {
-                        store.dispatch(WalletAction.LoadPayId.NotCreated)
-                    } else {
-                        store.dispatch(WalletAction.LoadPayId.Success(payId))
-                    }
-                }
-                is Result.Failure -> store.dispatch(WalletAction.LoadPayId.Failure)
             }
         }
     }

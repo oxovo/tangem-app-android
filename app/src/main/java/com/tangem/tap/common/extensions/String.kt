@@ -32,6 +32,8 @@ fun String.toQrCode(): Bitmap {
     return bmp
 }
 
+typealias EncodedBase64UrlString = String
+
 fun String.toBase64Url(): String {
     return Base64URL.encode(this).toString()
 }

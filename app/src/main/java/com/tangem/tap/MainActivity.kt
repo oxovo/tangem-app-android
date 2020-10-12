@@ -14,6 +14,7 @@ import com.tangem.TangemSdk
 import com.tangem.common.extensions.CardType
 import com.tangem.tangem_sdk_new.extensions.init
 import com.tangem.tap.common.redux.NotificationsHandler
+import com.tangem.tap.common.redux.global.GlobalAction
 import com.tangem.tap.common.redux.navigation.AppScreen
 import com.tangem.tap.common.redux.navigation.NavigationAction
 import com.tangem.tap.domain.TangemSdkManager
@@ -58,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         store.dispatch(NavigationAction.ActivityCreated(WeakReference(this)))
+        store.dispatch(GlobalAction.InitPayIdVerifyManager(this))
 
         tangemSdk = TangemSdk.init(
                 this, Config(cardFilter = CardFilter(EnumSet.allOf(CardType::class.java)))

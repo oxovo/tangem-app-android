@@ -4,6 +4,7 @@ import com.tangem.blockchain.common.AmountType
 import com.tangem.tap.common.CurrencyConverter
 import com.tangem.tap.features.send.redux.*
 import com.tangem.tap.features.send.redux.states.IdStateHolder
+import com.tangem.tap.features.send.redux.states.SendDialog
 import com.tangem.tap.features.send.redux.states.SendState
 import com.tangem.tap.store
 import org.rekotlin.Action
@@ -24,7 +25,7 @@ class SendScreenReducer {
 
             val reducer: SendInternalReducer = when (action) {
                 is PrepareSendScreen -> PrepareSendScreenStatesReducer()
-                is AddressPayIdActionUi, is AddressPayIdVerifyAction -> AddressPayIdReducer()
+                is AddressPayIdActionUi, is AddressPayIdAction -> AddressPayIdReducer()
                 is AmountActionUi, is AmountAction -> AmountReducer()
                 is FeeActionUi, is FeeAction -> FeeReducer()
                 is ReceiptAction -> ReceiptReducer()
@@ -40,7 +41,22 @@ class SendScreenReducer {
 private class SendReducer : SendInternalReducer {
     override fun handle(action: SendScreenAction, sendState: SendState): SendState {
         val result = when (action) {
-            is SendAction.ChangeSendButtonState -> sendState.copy(sendButtonState = action.state)
+            is SendAction.ChangeSendButtonState -> {
+                var intermediateResult = sendState.sendButtonState
+                action.currentAction?.let { intermediateResult = intermediateResult.copy(currentAction = it) }
+                action.sendState?.let { intermediateResult = intermediateResult.copy(sendState = it) }
+                action.verifyPayIdState?.let { intermediateResult = intermediateResult.copy(verityPayIdState = it) }
+                updateLastState(sendState.copy(sendButtonState = intermediateResult), intermediateResult)
+            }
+            is SendActionUi.ShowVerifyPayIdDialog -> {
+                val payId = sendState.addressPayIdState.viewFieldValue.value ?: ""
+                val address = sendState.addressPayIdState.recipientWalletAddress ?: ""
+                val sendDialog = SendDialog.PayIdVerifyDialog(payId, address)
+                updateLastState(sendState.copy(sendDialog = sendDialog), sendState)
+            }
+            is SendActionUi.HideVerifyPayIdDialog -> {
+                updateLastState(sendState.copy(sendDialog = null), sendState)
+            }
             else -> return sendState
         }
 

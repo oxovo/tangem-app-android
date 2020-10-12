@@ -21,12 +21,8 @@ sealed class TapError(
 ) : Throwable(), TapErrors, ArgError {
 
     object UnknownError : TapError(R.string.error_unknown)
-    object PayIdAlreadyCreated : TapError(R.string.error_payid_already_created)
-    object PayIdCreatingError : TapError(R.string.error_creating_payid)
-    object PayIdEmptyField : TapError(R.string.wallet_create_payid_empty)
     object UnknownBlockchain : TapError(R.string.wallet_unknown_blockchain)
     object NoInternetConnection : TapError(R.string.notification_no_internet)
-    object InsufficientBalance : TapError(R.string.error_insufficient_balance)
     object BlockchainInternalError : TapError(R.string.error_blockchain_internal)
     object AmountExceedsBalance : TapError(R.string.amount_exceeds_balance)
     object FeeExceedsBalance : TapError(R.string.fee_exceeds_balance)
@@ -36,6 +32,13 @@ sealed class TapError(
     data class DustAmount(override val args: List<Any>) : TapError(R.string.dust_amount)
     object DustChange : TapError(R.string.dust_change)
     data class CreateAccountUnderfunded(override val args: List<Any>) : TapError(R.string.create_account_underfunded)
+
+    object PayId {
+        object EmptyField : TapError(R.string.wallet_create_payid_empty)
+        object CreatingError : TapError(R.string.error_creating_payid)
+        object AlreadyCreated : TapError(R.string.error_payid_already_created)
+        object LoadUserDataFailed : TapError(R.string.error_payid_load_data_failed)
+    }
 
     data class ValidateTransactionErrors(
             override val errorList: List<TapError>,

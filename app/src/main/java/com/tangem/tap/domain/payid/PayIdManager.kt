@@ -2,53 +2,85 @@ package com.tangem.tap.domain.payid
 
 import com.tangem.blockchain.common.Blockchain
 import com.tangem.commands.common.network.Result
+import com.tangem.common.extensions.toHexString
+import com.tangem.tap.TapConfig
+import com.tangem.tap.common.extensions.withMainDispatcher
 import com.tangem.tap.domain.TapError
-import com.tangem.tap.network.payid.PayIdService
-import com.tangem.tap.network.payid.PayIdVerifyService
-import com.tangem.tap.network.payid.SetPayIdResponse
-import com.tangem.tap.network.payid.VerifyPayIdResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.tangem.tap.features.wallet.redux.PayIdState
+import com.tangem.tap.features.wallet.redux.WalletAction
+import com.tangem.tap.network.payid.MockTangemPayIdService
+import com.tangem.tap.network.payid.PayIdDataResponse
+import com.tangem.tap.store
 import retrofit2.HttpException
 import java.util.*
 
 class PayIdManager {
-    private val payIdService = PayIdService()
+    //    private val payIdService = TangemPayIdService()
+    private val payIdService = MockTangemPayIdService()
 
-    suspend fun getPayId(cardId: String, publicKey: String): Result<String?> = withContext(Dispatchers.IO) {
-        val result = payIdService.getPayId(cardId, publicKey)
-        when (result) {
-            is Result.Success -> return@withContext Result.Success(result.data.payId)
-            is Result.Failure -> {
-                (result.error as? HttpException)?.let {
-                    if (it.code() == 404) return@withContext Result.Success(null)
+    suspend fun loadPayIdAddress() {
+        val scanNoteResponse = store.state.globalState.scanNoteResponse ?: return
+        val wallet = scanNoteResponse.walletManager?.wallet ?: return
+        val publicKey = scanNoteResponse.card.cardPublicKey ?: return
+
+        val payIdIsDisabled = store.state.walletState.payIdData.payIdState == PayIdState.Disabled
+        if (!TapConfig.usePayId || payIdIsDisabled || !wallet.blockchain.isPayIdSupported()) return
+
+        val result = payIdService.getPayIdAddress(scanNoteResponse.card.cardId, publicKey.toHexString())
+        withMainDispatcher {
+            when (result) {
+                is Result.Success -> store.dispatch(WalletAction.LoadPayIdAddress.Success(result.data.payId))
+                is Result.Failure -> {
+                    val payIdNotCreatedYet = (result.error as? HttpException)?.code() == 404
+                    if (payIdNotCreatedYet) {
+                        store.dispatch(WalletAction.LoadPayIdAddress.NotCreated)
+                    } else {
+                        store.dispatch(WalletAction.LoadPayIdAddress.Failure)
+                    }
                 }
-                return@withContext result
             }
         }
     }
 
-
-    suspend fun setPayId(
-            cardId: String, publicKey: String, payId: String, address: String, blockchain: Blockchain
-    ): Result<SetPayIdResponse> = withContext(Dispatchers.IO) {
-        val result = payIdService.setPayId(cardId, publicKey, payId, address, blockchain.getPayIdNetwork())
-        when (result) {
-            is Result.Success -> return@withContext result
-            is Result.Failure -> {
-                (result.error as? HttpException)?.let {
-                    if (it.code() == 409) return@withContext Result.Failure(TapError.PayIdAlreadyCreated)
+    suspend fun createPayId(cardId: String, publicKey: String, payId: String, address: String, blockchain: Blockchain) {
+        val result = payIdService.createPayId(cardId, publicKey, payId, address, blockchain.getPayIdNetwork())
+        withMainDispatcher {
+            when (result) {
+                is Result.Success -> {
+                    if (result.data.success) {
+                        store.dispatch(WalletAction.CreatePayId.Success(payId))
+                    } else {
+                        store.dispatch(WalletAction.CreatePayId.Failure(TapError.PayId.CreatingError))
+                    }
                 }
-                return@withContext result
+                is Result.Failure -> {
+                    val payIdAlreadyCreated = (result.error as? HttpException)?.code() == 409
+                    if (payIdAlreadyCreated) {
+                        store.dispatch(WalletAction.CreatePayId.Failure(TapError.PayId.AlreadyCreated))
+                    } else {
+                        val error = result.error as? TapError ?: TapError.PayId.CreatingError
+                        store.dispatch(WalletAction.CreatePayId.Failure(error))
+                    }
+                }
             }
         }
     }
 
-    suspend fun verifyPayId(payId: String, blockchain: Blockchain): Result<VerifyPayIdResponse> = withContext(Dispatchers.IO) {
+    suspend fun loadPayIdData(payId: String, blockchain: Blockchain): Result<PayIdDataResponse> {
         val splitPayId = payId.split("\$")
         val user = splitPayId[0]
         val baseUrl = "https://${splitPayId[1]}/"
-        return@withContext PayIdVerifyService(baseUrl).verifyAddress(user, blockchain.getPayIdNetwork())
+        val result = payIdService.getPayIdData(baseUrl, user, blockchain.getPayIdNetwork())
+        return result
+//        withMainDispatcher {
+//            when (result) {
+//                is Result.Success -> {
+//                    store.dispatch(WalletAction.LoadUserPayId.Success(result.data))
+//                }
+//                is Result.Failure -> {
+//                    store.dispatch(WalletAction.LoadUserPayId.Failure(TapError.PayId.LoadUserDataFailed))
+//                }
+//            }
     }
 
     private fun Blockchain.getPayIdNetwork(): String {

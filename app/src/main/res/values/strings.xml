@@ -7,6 +7,7 @@
     <string name="generic_retry">Retry</string>
     <string name="generic_and">and</string>
     <string name="generic_warning">Warning</string>
+    <string name="generic_share">Share</string>
 
     <string name="tap_to_scan">Tap to scan</string>
     <string name="tap_the_card">Tap the card</string>
@@ -93,6 +94,7 @@
     <string name="send_fee_normal">Normal</string>
     <string name="send_fee_priority">Priority</string>
     <string name="send_btn_send">Send</string>
+    <string name="send_btn_verify_pay_id">Verify PaiID</string>
     <string name="send_total">Total</string>
     <string name="send_total_amount">Amount</string>
     <string name="send_total_fee">Fee</string>
@@ -123,8 +125,16 @@
     <string name="details_manage_security_passcode_description">Before execution of any command entailing a change of the card state you will have to enter the passcode.</string>
     <string name="details_manage_security_access_code_description">You will have to submit the correct access code before scanning the card.</string>
     <string name="details_erase_wallet_warning">This action is irreversible. If, after deleting the wallet, someone sends funds to it, then you will not be able to withdraw them.</string>
-    <string name="details_manage_security_warning">If you forget the code, you will lose the ability to use the card. There is no way to recover or change your code if you lose it.
-</string>
+    <string name="details_manage_security_warning">If you forget the code, you will lose the ability to use the card. There is no way to recover or change your code if you lose it.</string>
+
+    <string name="dialog_payid">PayID</string>
+    <string name="dialog_verify_payid">Verify PayID</string>
+    <string name="dialog_payid_address">Address</string>
+    <string name="dialog_payid_identity_key">Identity key</string>
+    <string name="dialog_payid_verify_and_send">Verify &amp; send</string>
+    <string name="dialog_payid_verify_identity_key">Verify the identity key with the PayID owner.</string>
+
+    <string name="error_payid_load_data_failed">This PayID already exists. Try a different one.</string>
 
 
 </resources>

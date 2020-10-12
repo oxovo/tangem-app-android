@@ -1,5 +1,5 @@
 <resources>
 
-    <string name="sign_rough">≈</string>
-
+    <string name="sign_rough" translatable="false">≈</string>
+    <string name="pub_key_representation" translatable="false">92886 – 30304 - 76680 - 91105/r/n92886 – 30304 - 76680 - 91105/r/n92886 – 30304 - 76680 - 91105</string>
 </resources>

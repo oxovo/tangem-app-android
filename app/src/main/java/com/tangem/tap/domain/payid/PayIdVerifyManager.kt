@@ -10,6 +10,7 @@ import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.gen.ECKeyGenerator
 import com.squareup.moshi.Moshi
 import com.tangem.common.extensions.toHexString
+import com.tangem.tap.common.extensions.EncodedBase64UrlString
 import com.tangem.tap.common.extensions.fromBase64Url
 import com.tangem.tap.common.extensions.toBase64Url
 import com.tangem.tap.network.payid.SignedPayIdSignature
@@ -23,13 +24,12 @@ import java.util.*
 /**
  * Created by Anton Zhilenkov on 06/10/2020.
  */
-typealias EncodedBase64UrlString = String
-
 class PayIdVerifyManager(
         private val ecJwkRepository: EcJwkRepository,
 ) {
 
     private val ecJwk: ECKey = ecJwkRepository.getJwk()
+    private val name = "identityKey"
 
     fun sign(payload: String): VerifiedPayId {
         val signer = ECDSASigner(ecJwk)
@@ -44,11 +44,11 @@ class PayIdVerifyManager(
         val signature: String = splits[2]
 
         val verifiedSignature = SignedPayIdSignature(encodedHeader, signature)
-        return VerifiedPayId(encodedPayload.fromBase64Url(), mutableListOf(verifiedSignature))
+        return VerifiedPayId(encodedPayload.fromBase64Url(), name, mutableListOf(verifiedSignature))
     }
 
     private fun createJwsHeader(publicJwk: ECKey): JWSHeader {
-        val custom = mutableMapOf<String, Any>("name" to "identityKey")
+        val custom = mutableMapOf<String, Any>("name" to name)
         val critical = setOf("name", "b64")
 
         return JWSHeader.Builder(JWSAlgorithm.ES256)
@@ -71,8 +71,15 @@ class PayIdVerifyManager(
         return verifiedPayId.thumbprint()
     }
 
-    fun getThumbprintRepresentation(thumbprint: String): String {
-        return thumbprint.toByteArray().toHexString().chunked(4).joinToString(" - ")
+    fun getThumbprintRepresentation(verifiedPayId: VerifiedPayId): String {
+        return getThumbprintRepresentation(verifiedPayId.thumbprint())
+    }
+
+    fun getThumbprintRepresentation(thumbprint: String?): String {
+        if (thumbprint == null) return ""
+
+        val chunked = thumbprint.toByteArray().toHexString().chunked(4).chunked(4)
+        return chunked.joinToString("\r\n") { it.joinToString(" - ") }
     }
 
 

@@ -1,6 +1,7 @@
 package com.tangem.tap.common.redux.global
 
 import com.tangem.tap.common.redux.AppState
+import com.tangem.tap.domain.payid.PayIdVerifyManager
 import org.rekotlin.Action
 
 fun globalReducer(action: Action, state: AppState): GlobalState {
@@ -32,6 +33,9 @@ fun globalReducer(action: Action, state: AppState): GlobalState {
             } else {
                 globalState
             }
+        }
+        is GlobalAction.InitPayIdVerifyManager -> {
+            globalState.copy(payIdVerifyManager = PayIdVerifyManager.create(action.context))
         }
         else -> globalState
     }

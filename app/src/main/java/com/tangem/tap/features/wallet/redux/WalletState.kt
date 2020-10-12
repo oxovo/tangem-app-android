@@ -7,6 +7,7 @@ import com.tangem.tap.common.entities.Button
 import com.tangem.tap.common.redux.global.CryptoCurrencyName
 import com.tangem.tap.features.wallet.models.PendingTransaction
 import com.tangem.tap.features.wallet.ui.BalanceWidgetData
+import com.tangem.tap.network.payid.PayIdDataResponse
 import org.rekotlin.StateType
 
 data class WalletState(
@@ -34,6 +35,7 @@ sealed class WalletDialog {
     ) : WalletDialog()
 
     data class CreatePayIdDialog(val creatingPayIdState: CreatingPayIdState?) : WalletDialog()
+    data class PayIdDetailDialog(val payIdData: PayIdDataResponse): WalletDialog()
     data class SelectAmountToSendDialog(val amounts: List<Amount>?) : WalletDialog()
     data class WarningDialog(val type: WarningType) : WalletDialog()
 }
@@ -49,7 +51,9 @@ enum class PayIdState { Disabled, Loading, NotCreated, Created, ErrorLoading }
 
 data class PayIdData(
         val payIdState: PayIdState = PayIdState.Loading,
-        val payId: String? = null
+        val payId: String? = null,
+        val payIdDataResponse: PayIdDataResponse? = null,
+        val thumbprintRepresentation: String? = null
 )
 
 enum class CreatingPayIdState { EnterPayId, Waiting }

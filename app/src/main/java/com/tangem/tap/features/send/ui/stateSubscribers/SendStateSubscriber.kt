@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.ViewGroup
 import androidx.core.text.bold
+import com.tangem.merchant.common.toggleWidget.ToggleWidget
 import com.tangem.tap.common.extensions.beginDelayedTransition
 import com.tangem.tap.common.extensions.enableError
 import com.tangem.tap.common.extensions.show
@@ -14,12 +15,13 @@ import com.tangem.tap.common.toggleWidget.ProgressState
 import com.tangem.tap.domain.MultiMessageError
 import com.tangem.tap.domain.assembleErrors
 import com.tangem.tap.features.send.BaseStoreFragment
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.Error
+import com.tangem.tap.features.send.redux.AddressPayIdAction.Error
 import com.tangem.tap.features.send.redux.FeeAction
 import com.tangem.tap.features.send.redux.reducers.ReceiptReducer
 import com.tangem.tap.features.send.redux.states.*
 import com.tangem.tap.features.send.ui.FeeUiHelper
 import com.tangem.tap.features.send.ui.SendFragment
+import com.tangem.tap.features.send.ui.dialog.PayIdVerifyDialog
 import com.tangem.tap.store
 import com.tangem.wallet.R
 import kotlinx.android.synthetic.main.btn_expand_collapse.*
@@ -47,6 +49,7 @@ class SendStateSubscriber(fragment: BaseStoreFragment) : FragmentStateSubscriber
                 StateId.AMOUNT -> handleAmountState(fg, state.amountState)
                 StateId.FEE -> handleFeeState(fg, state.feeState)
                 StateId.RECEIPT -> handleReceiptState(fg, state.receiptState)
+                StateId.SEND_BUTTON -> handleSendButtonState(fg, state.sendButtonState)
             }
         }
     }
@@ -54,18 +57,9 @@ class SendStateSubscriber(fragment: BaseStoreFragment) : FragmentStateSubscriber
     private fun handleSendScreen(fg: BaseStoreFragment, state: SendState) {
         val sendFragment = (fg as? SendFragment) ?: return
 
-        when (state.sendButtonState) {
-            SendButtonState.ENABLED -> {
-                fg.btnSend.isEnabled = true
-                sendFragment.sendBtn.setState(ProgressState.None(), true)
-            }
-            SendButtonState.DISABLED -> {
-                fg.btnSend.isEnabled = false
-                sendFragment.sendBtn.setState(ProgressState.None(), true)
-            }
-            SendButtonState.PROGRESS -> {
-                fg.btnSend.isEnabled = true
-                sendFragment.sendBtn.setState(ProgressState.Progress(), true)
+        when (val dialog = state.sendDialog) {
+            is SendDialog.PayIdVerifyDialog -> {
+                PayIdVerifyDialog.show(fg.requireContext(), dialog.payId, dialog.address)
             }
         }
     }
@@ -263,6 +257,37 @@ class SendStateSubscriber(fragment: BaseStoreFragment) : FragmentStateSubscriber
                             append(receipt.symbols.fiat)
                         }
                 totalTokenLayout.tvTotalTokenCryptoValue.update(willSent.toString())
+            }
+        }
+    }
+
+    private fun handleSendButtonState(fg: BaseStoreFragment, state: SendButtonState) {
+        val sendFragment = (fg as? SendFragment) ?: return
+
+        val actionBtn: ToggleWidget
+        val btnState: ButtonState
+        when (state.currentAction) {
+            ActionButton.SEND ->{
+                actionBtn = sendFragment.sendBtn
+                btnState = state.sendState
+            }
+            ActionButton.VERIFY_PAY_ID -> {
+                actionBtn = sendFragment.verifyPayIdBtn
+                btnState = state.verityPayIdState
+            }
+        }
+        when (btnState) {
+            ButtonState.ENABLED -> {
+                fg.btnSend.isEnabled = true
+                actionBtn.setState(ProgressState.None(), true)
+            }
+            ButtonState.DISABLED -> {
+                fg.btnSend.isEnabled = false
+                actionBtn.setState(ProgressState.None(), true)
+            }
+            ButtonState.PROGRESS -> {
+                fg.btnSend.isEnabled = true
+                actionBtn.setState(ProgressState.Progress(), true)
             }
         }
     }

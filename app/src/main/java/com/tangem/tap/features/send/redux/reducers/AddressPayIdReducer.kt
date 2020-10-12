@@ -1,9 +1,9 @@
 package com.tangem.tap.features.send.redux.reducers
 
+import com.tangem.tap.features.send.redux.AddressPayIdAction
+import com.tangem.tap.features.send.redux.AddressPayIdAction.AddressResolve
+import com.tangem.tap.features.send.redux.AddressPayIdAction.PayIdResolve
 import com.tangem.tap.features.send.redux.AddressPayIdActionUi
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.AddressVerification
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.PayIdVerification
 import com.tangem.tap.features.send.redux.SendScreenAction
 import com.tangem.tap.features.send.redux.states.AddressPayIdState
 import com.tangem.tap.features.send.redux.states.InputViewValue
@@ -15,7 +15,7 @@ import com.tangem.tap.features.send.redux.states.SendState
 class AddressPayIdReducer : SendInternalReducer {
     override fun handle(action: SendScreenAction, sendState: SendState): SendState = when (action) {
         is AddressPayIdActionUi -> handleUiAction(action, sendState, sendState.addressPayIdState)
-        is AddressPayIdVerifyAction -> handleAction(action, sendState, sendState.addressPayIdState)
+        is AddressPayIdAction -> handleAction(action, sendState, sendState.addressPayIdState)
         else -> sendState
     }
 
@@ -34,9 +34,9 @@ class AddressPayIdReducer : SendInternalReducer {
         return updateLastState(sendState.copy(addressPayIdState = result), result)
     }
 
-    private fun handleAction(action: AddressPayIdVerifyAction, sendState: SendState, state: AddressPayIdState): SendState {
+    private fun handleAction(action: AddressPayIdAction, sendState: SendState, state: AddressPayIdState): SendState {
         val result = when (action) {
-            is PayIdVerification.SetPayIdWalletAddress -> {
+            is PayIdResolve.SetPayIdWalletAddress -> {
                 state.copy(
                         viewFieldValue = InputViewValue(action.payId, action.isUserInput),
                         normalFieldValue = action.payId,
@@ -45,7 +45,7 @@ class AddressPayIdReducer : SendInternalReducer {
                         error = null
                 )
             }
-            is AddressVerification.SetWalletAddress -> {
+            is AddressResolve.SetWalletAddress -> {
                 state.copy(
                         viewFieldValue = InputViewValue(action.address, action.isUserInput),
                         normalFieldValue = action.address,
@@ -54,9 +54,10 @@ class AddressPayIdReducer : SendInternalReducer {
                         error = null
                 )
             }
-            is AddressPayIdVerifyAction.ChangePasteBtnEnableState -> state.copy(pasteIsEnabled = action.isEnabled)
-            is AddressVerification.SetAddressError -> state.copy(error = action.error, recipientWalletAddress = null)
-            is PayIdVerification.SetPayIdError -> state.copy(error = action.error, recipientWalletAddress = null)
+            is AddressPayIdAction.ChangePasteBtnEnableState -> state.copy(pasteIsEnabled = action.isEnabled)
+            is AddressPayIdAction.PayIdVerified -> state.copy(payIdIsVerified = true)
+            is AddressResolve.SetAddressError -> state.copy(error = action.error, recipientWalletAddress = null)
+            is PayIdResolve.SetPayIdError -> state.copy(error = action.error, recipientWalletAddress = null)
         }
         return updateLastState(sendState.copy(addressPayIdState = result), result)
     }

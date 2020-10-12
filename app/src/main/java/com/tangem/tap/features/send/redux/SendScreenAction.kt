@@ -5,9 +5,10 @@ import com.tangem.blockchain.common.Amount
 import com.tangem.tap.common.redux.ErrorAction
 import com.tangem.tap.common.redux.ToastNotificationAction
 import com.tangem.tap.domain.TapError
+import com.tangem.tap.features.send.redux.states.ActionButton
+import com.tangem.tap.features.send.redux.states.ButtonState
 import com.tangem.tap.features.send.redux.states.FeeType
 import com.tangem.tap.features.send.redux.states.MainCurrencyType
-import com.tangem.tap.features.send.redux.states.SendButtonState
 import com.tangem.wallet.R
 import org.rekotlin.Action
 import java.math.BigDecimal
@@ -35,7 +36,7 @@ sealed class AddressPayIdActionUi : SendScreenActionUi {
     data class TruncateOrRestore(val truncate: Boolean) : AddressPayIdActionUi()
 }
 
-sealed class AddressPayIdVerifyAction : SendScreenAction {
+sealed class AddressPayIdAction : SendScreenAction {
     enum class Error {
         PAY_ID_UNSUPPORTED_BY_BLOCKCHAIN,
         PAY_ID_NOT_REGISTERED,
@@ -44,16 +45,17 @@ sealed class AddressPayIdVerifyAction : SendScreenAction {
         ADDRESS_SAME_AS_WALLET
     }
 
-    data class ChangePasteBtnEnableState(val isEnabled: Boolean) : AddressPayIdVerifyAction()
+    data class ChangePasteBtnEnableState(val isEnabled: Boolean) : AddressPayIdAction()
 
-    sealed class PayIdVerification : AddressPayIdVerifyAction() {
-        data class SetPayIdError(val error: Error?) : PayIdVerification()
-        data class SetPayIdWalletAddress(val payId: String, val payIdWalletAddress: String, val isUserInput: Boolean) : PayIdVerification()
+    object PayIdVerified: AddressPayIdAction()
+    sealed class PayIdResolve : AddressPayIdAction() {
+        data class SetPayIdError(val error: Error?) : PayIdResolve()
+        data class SetPayIdWalletAddress(val payId: String, val payIdWalletAddress: String, val isUserInput: Boolean) : PayIdResolve()
     }
 
-    sealed class AddressVerification : AddressPayIdVerifyAction() {
-        data class SetAddressError(val error: Error?) : AddressVerification()
-        data class SetWalletAddress(val address: String, val isUserInput: Boolean) : AddressVerification()
+    sealed class AddressResolve : AddressPayIdAction() {
+        data class SetAddressError(val error: Error?) : AddressResolve()
+        data class SetWalletAddress(val address: String, val isUserInput: Boolean) : AddressResolve()
     }
 }
 
@@ -104,11 +106,17 @@ sealed class ReceiptAction : SendScreenAction {
 
 sealed class SendActionUi : SendScreenActionUi {
     data class SendAmountToRecipient(val messageForSigner: Message) : SendScreenActionUi
+    object ShowVerifyPayIdDialog : SendActionUi()
+    object HideVerifyPayIdDialog : SendActionUi()
 }
 
 sealed class SendAction : SendScreenAction {
 
-    data class ChangeSendButtonState(val state: SendButtonState) : SendAction()
+    data class ChangeSendButtonState(
+            val currentAction: ActionButton? = null,
+            val sendState: ButtonState? = null,
+            val verifyPayIdState: ButtonState? = null,
+    ) : SendAction()
     object SendSuccess : SendAction(), ToastNotificationAction {
         override val messageResource: Int = R.string.send_transaction_complete
     }

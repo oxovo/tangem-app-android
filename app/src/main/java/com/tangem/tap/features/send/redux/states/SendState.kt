@@ -20,7 +20,7 @@ interface IdStateHolder {
 }
 
 enum class StateId {
-    SEND_SCREEN, ADDRESS_PAY_ID, AMOUNT, FEE, RECEIPT
+    SEND_SCREEN, ADDRESS_PAY_ID, AMOUNT, FEE, RECEIPT, SEND_BUTTON
 }
 
 interface SendScreenState : StateType, IdStateHolder
@@ -34,7 +34,8 @@ data class SendState(
         val amountState: AmountState = AmountState(),
         val feeState: FeeState = FeeState(),
         val receiptState: ReceiptState = ReceiptState(),
-        val sendButtonState: SendButtonState = SendButtonState.DISABLED
+        val sendButtonState: SendButtonState = SendButtonState(),
+        val sendDialog: SendDialog? = null,
 ) : SendScreenState {
 
     override val stateId: StateId = StateId.SEND_SCREEN
@@ -87,7 +88,7 @@ data class SendState(
         }
     }
 
-    fun getButtonState(): SendButtonState = if (isReadyToSend()) SendButtonState.ENABLED else SendButtonState.DISABLED
+    fun getButtonState(): ButtonState = if (isReadyToSend()) ButtonState.ENABLED else ButtonState.DISABLED
 
     fun getTotalAmountToSend(value: BigDecimal = amountState.amountToSendCrypto): BigDecimal {
         val needToExtractFee = amountState.isCoinAmount() && feeState.feeIsIncluded
@@ -104,10 +105,6 @@ data class SendState(
             AmountType.Reserve -> false
         }
     }
-}
-
-enum class SendButtonState {
-    ENABLED, DISABLED, PROGRESS
 }
 
 data class AmountState(
@@ -163,3 +160,22 @@ data class MainCurrency(
         val currencySymbol: String,
         val isEnabled: Boolean = true
 )
+
+enum class ButtonState {
+    ENABLED, DISABLED, PROGRESS
+}
+
+enum class ActionButton {
+    SEND, VERIFY_PAY_ID
+}
+
+data class SendButtonState(
+        val currentAction: ActionButton = ActionButton.SEND,
+        val sendState: ButtonState = ButtonState.DISABLED,
+        val verityPayIdState: ButtonState = ButtonState.DISABLED,
+        override val stateId: StateId = StateId.SEND_BUTTON
+) : SendScreenState
+
+sealed class SendDialog {
+    data class PayIdVerifyDialog(val payId: String, val address: String): SendDialog()
+}

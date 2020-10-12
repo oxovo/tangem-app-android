@@ -1,7 +1,6 @@
 package com.tangem.tap.common.redux.global
 
 import com.tangem.commands.common.network.TangemService
-import com.tangem.tap.appContext
 import com.tangem.tap.common.entities.TapCurrency.Companion.DEFAULT_FIAT_CURRENCY
 import com.tangem.tap.domain.TapWalletManager
 import com.tangem.tap.domain.payid.PayIdManager
@@ -15,7 +14,7 @@ data class GlobalState(
         val scanNoteResponse: ScanNoteResponse? = null,
         val tapWalletManager: TapWalletManager = TapWalletManager(),
         val payIdManager: PayIdManager = PayIdManager(),
-        val payIdVerifyManager: PayIdVerifyManager = PayIdVerifyManager.create(appContext),
+        val payIdVerifyManager: PayIdVerifyManager? = null,
         val coinMarketCapService: CoinMarketCapService = CoinMarketCapService(),
         val tangemService: TangemService = TangemService(),
         val conversionRates: ConversionRates = ConversionRates(emptyMap()),

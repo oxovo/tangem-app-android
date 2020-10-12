@@ -20,10 +20,7 @@ import com.tangem.tap.common.redux.navigation.AppScreen
 import com.tangem.tap.common.redux.navigation.NavigationAction
 import com.tangem.tap.features.details.redux.DetailsAction
 import com.tangem.tap.features.wallet.redux.*
-import com.tangem.tap.features.wallet.ui.dialogs.AmountToSendDialog
-import com.tangem.tap.features.wallet.ui.dialogs.PayIdDialog
-import com.tangem.tap.features.wallet.ui.dialogs.QrDialog
-import com.tangem.tap.features.wallet.ui.dialogs.WarningDialog
+import com.tangem.tap.features.wallet.ui.dialogs.*
 import com.tangem.tap.store
 import com.tangem.wallet.R
 import kotlinx.android.synthetic.main.card_balance.*
@@ -136,8 +133,8 @@ class WalletFragment : Fragment(R.layout.fragment_wallet), StoreSubscriber<Walle
                 group_payid.show()
                 tv_create_payid.hide()
                 tv_payid_address.show()
-                tv_payid_address.text = state.payIdData.payId
-
+                tv_payid_address.text = state.payIdData.payId ?: state.payIdData.payIdDataResponse?.payId
+                tv_payid_address.setOnClickListener { store.dispatch(WalletAction.PayIdDetail.Show) }
             }
             PayIdState.ErrorLoading -> {
             }
@@ -229,6 +226,11 @@ class WalletFragment : Fragment(R.layout.fragment_wallet), StoreSubscriber<Walle
             is WalletDialog.WarningDialog -> {
                 if (dialog == null) dialog = WarningDialog(requireContext()).apply {
                     this.show(walletDialog.type)
+                }
+            }
+            is WalletDialog.PayIdDetailDialog -> {
+                if (dialog == null) {
+                    dialog = PayIdDetailDialog.show(requireContext(), walletDialog.payIdData).apply { show() }
                 }
             }
             null -> {

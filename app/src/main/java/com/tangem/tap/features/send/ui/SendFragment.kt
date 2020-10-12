@@ -7,6 +7,7 @@ import android.text.method.DigitsKeyListener
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import androidx.annotation.StringRes
 import androidx.core.view.postDelayed
 import androidx.core.widget.addTextChangedListener
 import com.tangem.Message
@@ -26,6 +27,7 @@ import com.tangem.tap.features.send.redux.*
 import com.tangem.tap.features.send.redux.AddressPayIdActionUi.*
 import com.tangem.tap.features.send.redux.AmountActionUi.*
 import com.tangem.tap.features.send.redux.FeeActionUi.*
+import com.tangem.tap.features.send.redux.states.ActionButton
 import com.tangem.tap.features.send.redux.states.FeeType
 import com.tangem.tap.features.send.redux.states.MainCurrencyType
 import com.tangem.tap.features.send.ui.stateSubscribers.SendStateSubscriber
@@ -47,12 +49,7 @@ import java.text.DecimalFormatSymbols
 class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
 
     lateinit var sendBtn: ToggleWidget
-
-    private fun initSendButtonStates() {
-        sendBtn = ToggleWidget(flSendButtonContainer, btnSend, progress, ProgressState.None())
-        sendBtn.setupSendButtonStateModifiers(requireContext())
-        sendBtn.setState(ProgressState.None())
-    }
+    lateinit var verifyPayIdBtn: ToggleWidget
 
     private val sendSubscriber = SendStateSubscriber(this)
     private lateinit var keyboardObserver: KeyboardObserver
@@ -60,16 +57,26 @@ class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initSendButtonStates()
+        sendBtn = ToggleWidget(flSendButtonContainer, btnSend, progress, ProgressState.None())
+        verifyPayIdBtn = ToggleWidget(flSendButtonContainer, btnSend, progress, ProgressState.None())
+        initSendButtonStates(sendBtn, R.string.send_btn_send)
+        initSendButtonStates(verifyPayIdBtn, R.string.send_btn_verify_pay_id)
+
         setupAddressOrPayIdLayout()
         setupAmountLayout()
         setupFeeLayout()
 
         btnSend.setOnClickListener {
-            store.dispatch(SendActionUi.SendAmountToRecipient(
-                    Message(getString(R.string.tap_to_sign))
-            ))
+            when (store.state.sendState.sendButtonState.currentAction) {
+                ActionButton.SEND -> store.dispatch(SendActionUi.SendAmountToRecipient(Message(getString(R.string.tap_to_sign))))
+                ActionButton.VERIFY_PAY_ID -> store.dispatch(SendActionUi.ShowVerifyPayIdDialog)
+            }
         }
+    }
+
+    private fun initSendButtonStates(toggleWidget: ToggleWidget, @StringRes btnText: Int) {
+        toggleWidget.setupSendButtonStateModifiers(requireContext(), btnText)
+        toggleWidget.setState(ProgressState.None())
     }
 
     private fun setupAddressOrPayIdLayout() {
@@ -115,7 +122,7 @@ class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
     private fun setupAmountLayout() {
         store.dispatch(SetMainCurrency(restoreMainCurrency()))
         store.dispatch(ReceiptAction.RefreshReceipt)
-        store.dispatch(SendAction.ChangeSendButtonState(store.state.sendState.getButtonState()))
+        store.dispatch(SendAction.ChangeSendButtonState(sendState = store.state.sendState.getButtonState()))
 
         val decimalSeparator = DecimalFormatSymbols.getInstance().decimalSeparator.toString()
         store.dispatch(AmountAction.SetDecimalSeparator(decimalSeparator))
@@ -123,7 +130,7 @@ class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
         tvAmountCurrency.setOnClickListener {
             store.dispatch(ToggleMainCurrency)
             store.dispatch(ReceiptAction.RefreshReceipt)
-            store.dispatch(SendAction.ChangeSendButtonState(store.state.sendState.getButtonState()))
+            store.dispatch(SendAction.ChangeSendButtonState(sendState = store.state.sendState.getButtonState()))
         }
 
         val maxAmountSnackbar = MaxAmountSnackbar.make(etAmountToSend) {
@@ -253,9 +260,9 @@ class FeeUiHelper {
     }
 }
 
-private fun ToggleWidget.setupSendButtonStateModifiers(context: Context) {
+private fun ToggleWidget.setupSendButtonStateModifiers(context: Context, @StringRes btnText: Int) {
     mainViewModifiers.clear()
-    mainViewModifiers.add(ReplaceTextStateModifier(context.getString(R.string.send_btn_send), ""))
+    mainViewModifiers.add(ReplaceTextStateModifier(context.getString(btnText), ""))
     mainViewModifiers.add(
             TextViewDrawableStateModifier(
                     context.getDrawableCompat(R.drawable.ic_arrow_right), null, TextViewDrawableStateModifier.RIGHT

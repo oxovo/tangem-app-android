@@ -5,15 +5,19 @@ import com.tangem.commands.common.network.Result
 import com.tangem.tap.common.redux.AppState
 import com.tangem.tap.domain.payid.PayIdManager
 import com.tangem.tap.domain.payid.isPayIdSupported
+import com.tangem.tap.features.send.redux.AddressPayIdAction
+import com.tangem.tap.features.send.redux.AddressPayIdAction.AddressResolve.SetAddressError
+import com.tangem.tap.features.send.redux.AddressPayIdAction.AddressResolve.SetWalletAddress
+import com.tangem.tap.features.send.redux.AddressPayIdAction.Error
+import com.tangem.tap.features.send.redux.AddressPayIdAction.PayIdResolve.SetPayIdError
+import com.tangem.tap.features.send.redux.AddressPayIdAction.PayIdResolve.SetPayIdWalletAddress
 import com.tangem.tap.features.send.redux.AddressPayIdActionUi
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.AddressVerification.SetAddressError
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.AddressVerification.SetWalletAddress
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.Error
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.PayIdVerification.SetPayIdError
-import com.tangem.tap.features.send.redux.AddressPayIdVerifyAction.PayIdVerification.SetPayIdWalletAddress
 import com.tangem.tap.features.send.redux.FeeAction
+import com.tangem.tap.features.send.redux.SendAction
+import com.tangem.tap.features.send.redux.states.ActionButton
+import com.tangem.tap.features.send.redux.states.ButtonState
 import com.tangem.tap.scope
+import com.tangem.tap.store
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -77,7 +81,7 @@ internal class AddressPayIdMiddleware {
         }
 
         scope.launch {
-            val result = PayIdManager().verifyPayId(payId, blockchain)
+            val result = PayIdManager().loadPayIdData(payId, blockchain)
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Success -> {
@@ -91,6 +95,12 @@ internal class AddressPayIdMiddleware {
                         if (failReason == null) {
                             dispatch(SetPayIdWalletAddress(payId, address, isUserInput))
                             dispatch(FeeAction.RequestFee)
+                            if (!store.state.sendState.addressPayIdState.payIdIsVerified) {
+                                dispatch(SendAction.ChangeSendButtonState(
+                                        currentAction = ActionButton.VERIFY_PAY_ID,
+                                        verifyPayIdState = ButtonState.ENABLED
+                                ))
+                            }
                         } else {
                             dispatch(SetAddressError(failReason))
                         }
@@ -109,6 +119,10 @@ internal class AddressPayIdMiddleware {
         val failReason = isValidBlockchainAddressAndNotTheSameAsWallet(wallet, supposedAddress)
         if (failReason == null) {
             dispatch(SetWalletAddress(supposedAddress, isUserInput))
+            dispatch(SendAction.ChangeSendButtonState(
+                    currentAction = ActionButton.SEND,
+                    sendState = ButtonState.DISABLED
+            ))
         } else {
             dispatch(SetAddressError(failReason))
         }
@@ -141,10 +155,10 @@ internal class AddressPayIdMiddleware {
         val internalDispatcher: (Action) -> Unit = {
             when (it) {
                 is SetWalletAddress, is SetPayIdWalletAddress -> {
-                    dispatch(AddressPayIdVerifyAction.ChangePasteBtnEnableState(true))
+                    dispatch(AddressPayIdAction.ChangePasteBtnEnableState(true))
                 }
                 is SetAddressError, is SetPayIdError -> {
-                    dispatch(AddressPayIdVerifyAction.ChangePasteBtnEnableState(false))
+                    dispatch(AddressPayIdAction.ChangePasteBtnEnableState(false))
                 }
             }
         }
