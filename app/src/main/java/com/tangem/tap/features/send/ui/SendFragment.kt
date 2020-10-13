@@ -68,7 +68,9 @@ class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
 
         btnSend.setOnClickListener {
             when (store.state.sendState.sendButtonState.currentAction) {
-                ActionButton.SEND -> store.dispatch(SendActionUi.SendAmountToRecipient(Message(getString(R.string.tap_to_sign))))
+                ActionButton.SEND -> store.dispatch(SendActionUi.SendAmountToRecipient(
+                        Message(getString(R.string.initial_message_sign_header))
+                ))
                 ActionButton.VERIFY_PAY_ID -> store.dispatch(SendActionUi.ShowVerifyPayIdDialog)
             }
         }
@@ -151,7 +153,7 @@ class SendFragment : BaseStoreFragment(R.layout.fragment_send) {
             }
         }
 
-        etAmountToSend.keyListener = DigitsKeyListener.getInstance("0123456789$decimalSeparator")
+        etAmountToSend.keyListener = DigitsKeyListener.getInstance("0123456789,.")
         etAmountToSend.setOnFocusChangeListener { v, hasFocus ->
             snackbarControlledByChangingFocus = true
             if (hasFocus) {

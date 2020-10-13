@@ -6,6 +6,7 @@ import com.tangem.blockchain.common.WalletManager
 import com.tangem.common.extensions.isZero
 import com.tangem.tap.common.CurrencyConverter
 import com.tangem.tap.common.entities.TapCurrency
+import com.tangem.tap.common.text.DecimalDigitsInputFilter
 import com.tangem.tap.domain.TapError
 import com.tangem.tap.store
 import org.rekotlin.StateType
@@ -140,13 +141,7 @@ data class AmountState(
     }
 
     fun restoreDecimalSeparator(value: String): String {
-        if (value.contains(decimalSeparator)) return value
-
-        return if (decimalSeparator == ".") {
-            value.replace(",", decimalSeparator)
-        } else {
-            value.replace(".", decimalSeparator)
-        }
+        return DecimalDigitsInputFilter.setDecimalSeparator(value, decimalSeparator)
     }
 }
 

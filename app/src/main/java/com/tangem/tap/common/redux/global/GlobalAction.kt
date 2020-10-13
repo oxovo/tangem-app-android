@@ -17,6 +17,6 @@ sealed class GlobalAction : Action {
         data class Success(val appCurrency: FiatCurrencyName) : GlobalAction()
     }
 
-    data class UpdateWalletSignedHashes(val walletSignedHashes: Int) : GlobalAction()
+    data class UpdateWalletSignedHashes(val walletSignedHashes: Int?) : GlobalAction()
     data class InitPayIdVerifyManager(val context: Context) : GlobalAction()
 }

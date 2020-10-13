@@ -118,7 +118,7 @@ sealed class SendAction : SendScreenAction {
             val verifyPayIdState: ButtonState? = null,
     ) : SendAction()
     object SendSuccess : SendAction(), ToastNotificationAction {
-        override val messageResource: Int = R.string.send_transaction_complete
+        override val messageResource: Int = R.string.send_transaction_success
     }
 
     data class SendError(override val error: TapError) : SendAction(), ErrorAction
