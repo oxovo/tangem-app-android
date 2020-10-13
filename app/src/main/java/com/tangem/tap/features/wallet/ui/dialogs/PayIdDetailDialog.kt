@@ -34,10 +34,10 @@ class PayIdDetailDialog(context: Context) : AlertDialog(context) {
             view.tvIdentityKey.text = thumbRepresentation
 
             dialog.setView(view)
-            dialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.generic_share)) { dlg, which ->
+            dialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.common_share)) { dlg, which ->
                 context.shareText(thumbRepresentation)
             }
-            dialog.setButton(BUTTON_POSITIVE, context.getString(R.string.generic_done)) { dlg, which ->
+            dialog.setButton(BUTTON_POSITIVE, context.getString(R.string.common_done)) { dlg, which ->
                 store.dispatch(WalletAction.PayIdDetail.Hide)
             }
 

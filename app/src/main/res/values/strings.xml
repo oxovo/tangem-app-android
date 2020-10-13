@@ -9,6 +9,7 @@
     <string name="common_done">Done</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_accept">Accept</string>
+    <string name="common_share">Share</string>
     <!--iOS-->
     <string name="common_camera_denied_alert_title">Camera access denied</string>
     <string name="common_camera_denied_alert_message">You have not given access to your camera, please adjust your privacy settings</string>
@@ -101,6 +102,7 @@
     <string name="send_fee_picker_normal">Normal</string>
     <string name="send_fee_picker_priority">Priority</string>
     <string name="send_btn_send">@string/send_title</string>
+    <string name="send_btn_verify_pay_id">Verify PaiID</string>
     <string name="send_total_label">Total</string>
     <string name="send_amount_label">Amount</string>
     <string name="send_fee_label">Fee</string>
