@@ -29,7 +29,7 @@ class PayIdVerifyDialog(context: Context) : AlertDialog(context) {
             view.tvPayIdAddress.text = payIdAddress
             dialog.setView(view)
 
-            dialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.general_cancel)) { dlg, which ->
+            dialog.setButton(BUTTON_NEGATIVE, context.getString(R.string.common_cancel)) { dlg, which ->
                 store.dispatch(SendActionUi.HideVerifyPayIdDialog)
             }
             dialog.setButton(BUTTON_POSITIVE, context.getString(R.string.dialog_payid_verify_and_send)) { dlg, which ->
