@@ -18,6 +18,32 @@
           "current_key": "1"
         }
       ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1",
+        "android_client_info": {
+          "package_name": "com.tangem.wallet.dev"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "1"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1",
+        "android_client_info": {
+          "package_name": "com.tangem.wallet"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "1"
+        }
+      ]
     }
   ],
   "configuration_version": "1"
