@@ -5,10 +5,10 @@
   },
   {
     "name": "moonPayApiKey",
-    "value": "pk_test_kc90oYTANy7UQdBavDKGfL4K9l6VEPE"
+    "value": "pk_live_YTDl4Uei4411FXLAFe2rn8R2qWSiQcm"
   },
   {
     "name": "moonPayApiSecretKey",
-    "value": "sk_test_V8w4M19LbDjjYOt170s0tGuvXAgyEb1C"
+    "value": "sk_live_7wMjoyGTGAB3i1suQHszCWRRqJBRPsQF"
   }
 ]
