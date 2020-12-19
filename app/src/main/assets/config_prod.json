@@ -1,0 +1,14 @@
+[
+  {
+    "name": "coinMarketCapKey",
+    "value": "f6622117-c043-47a0-8975-9d673ce484de"
+  },
+  {
+    "name": "moonPayApiKey",
+    "value": "pk_live_YTDl4Uei4411FXLAFe2rn8R2qWSiQcm"
+  },
+  {
+    "name": "moonPayApiSecretKey",
+    "value": "sk_live_7wMjoyGTGAB3i1suQHszCWRRqJBRPsQF"
+  }
+]
