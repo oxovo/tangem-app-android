@@ -1,4 +1,4 @@
-package com.tangem.tap.domain.config
+package com.tangem.tap.domain.configurable.config
 
 /**
  * Created by Anton Zhilenkov on 12/11/2020.
