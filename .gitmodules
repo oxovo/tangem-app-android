@@ -1,0 +1,3 @@
+[submodule "app/src/main/assets/tangem-android-config"]
+	path = app/src/main/assets/tangem-android-config
+	url = git@bitbucket.org:tangem/tangem-android-config.git
