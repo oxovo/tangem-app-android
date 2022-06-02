@@ -284,39 +284,38 @@ data class WalletState(
     }
 
     private fun updateTotalBalance(): WalletState {
-        return if (this.wallets.isNotEmpty()) {
-            val globalState = store.state.globalState
-            val walletsData = this.wallets
-                .flatMap(WalletStore::walletsData)
-                .filterNot { wallet ->
-                    wallet.currency.isCustomCurrency(
-                        derivationStyle = globalState
-                            .scanResponse
-                            ?.card
-                            ?.derivationStyle
-                    )
-                }
-
-            this.copy(
-                totalBalance = TotalBalance(
-                    state = walletsData.findProgressState(),
-                    fiatAmount = walletsData.calculateTotalFiatAmount(),
-                    fiatCurrency = globalState.appCurrency
+        val globalState = store.state.globalState
+        val walletsData = this.wallets
+            .flatMap(WalletStore::walletsData)
+            .filterNot { wallet ->
+                wallet.currency.isCustomToken(
+                    derivationStyle = globalState
+                        .scanResponse
+                        ?.card
+                        ?.derivationStyle
                 )
+            }
+
+        return if (walletsData.isNotEmpty()) this.copy(
+            totalBalance = TotalBalance(
+                state = walletsData.findProgressState(),
+                fiatAmount = walletsData.calculateTotalFiatAmount(),
+                fiatCurrency = globalState.appCurrency
             )
-        } else this.copy(
+        ) else this.copy(
             totalBalance = null
         )
     }
 
     private fun updateProgressState(): WalletState {
-        return if (this.wallets.isNotEmpty()) {
-            val walletsData = this.wallets
-                .flatMap(WalletStore::walletsData)
+        val walletsData = this.wallets
+            .flatMap(WalletStore::walletsData)
+        
+        return if (walletsData.isNotEmpty()) {
             val newProgressState = walletsData.findProgressState()
 
             this.copy(
-                state = walletsData.findProgressState(),
+                state = newProgressState,
                 error = this.error.takeIf { newProgressState == ProgressState.Error }
             )
         } else this
