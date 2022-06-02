@@ -48,7 +48,7 @@
                     tools:text="J" />
 
             <View
-                    android:id="@+id/badge_custom_balance"
+                    android:id="@+id/badge_custom_currency"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:background="@drawable/shape_badge_custom_currency"

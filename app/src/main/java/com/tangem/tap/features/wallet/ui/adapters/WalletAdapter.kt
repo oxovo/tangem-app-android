@@ -67,12 +67,12 @@ class WalletAdapter
             // Skip changes when on refreshing status
             if (status == BalanceStatus.Refreshing) return@with
 
-            val isCustomCurrency = wallet.currency.isCustomCurrency(
-                derivationStyle = store.state.globalState
-                    .scanResponse
-                    ?.card
-                    ?.derivationStyle
-            )
+            val derivationStyle = store.state.globalState
+                .scanResponse
+                ?.card
+                ?.derivationStyle
+            val isCustomToken = wallet.currency.isCustomToken(derivationStyle)
+            val isCustomCurrency = wallet.currency.isCustomCurrency(derivationStyle)
             val statusMessage = when (status) {
                 BalanceStatus.TransactionInProgress -> {
                     root.getString(R.string.wallet_balance_tx_in_progress)
@@ -113,13 +113,13 @@ class WalletAdapter
             lContent.tvStatus.text = statusMessage
 
             lContent.tvExchangeRate.isVisible = statusMessage == null
-            lContent.tvExchangeRate.text = if (isCustomCurrency) {
+            lContent.tvExchangeRate.text = if (isCustomToken) {
                 root.getString(id = R.string.token_item_no_rate)
             } else {
                 wallet.fiatRateString ?: "—"
             }
 
-            badgeCustomBalance.isVisible = isCustomCurrency
+            badgeCustomCurrency.isVisible = isCustomCurrency
 
             cardWallet.setOnClickListener {
                 store.dispatch(WalletAction.MultiWallet.SelectWallet(wallet))

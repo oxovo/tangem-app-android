@@ -479,6 +479,10 @@ sealed interface Currency {
         return derivationPath != blockchain.derivationPath(derivationStyle)?.rawPath
     }
 
+    fun isCustomToken(derivationStyle: DerivationStyle?): Boolean {
+        return (this !is Blockchain) && isCustomCurrency(derivationStyle)
+    }
+
     fun isBlockchain(): Boolean = this is Blockchain
 
     fun isToken(): Boolean = this is Token
