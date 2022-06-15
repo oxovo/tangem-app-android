@@ -10,6 +10,7 @@ import com.tangem.tap.features.details.redux.walletconnect.WalletConnectSession
 import com.tangem.tap.features.details.redux.walletconnect.WalletForSession
 import com.trustwallet.walletconnect.models.WCPeerMeta
 import com.trustwallet.walletconnect.models.session.WCSession
+import timber.log.Timber
 
 class WalletConnectRepository(val context: Application) {
     private val moshi = MoshiConverter.defaultMoshi()
@@ -37,12 +38,15 @@ class WalletConnectRepository(val context: Application) {
             val json = context.readFileText(FILE_NAME_PREFIX_SESSIONS)
             walletConnectAdapter.fromJson(json)!!.map { it.toSession() }
         } catch (exception: Exception) {
+            Timber.e(exception)
             emptyList()
         }
     }
 
     private fun saveSessions(sessions: List<WalletConnectSession>) {
         val json = walletConnectAdapter.toJson(sessions.map { SessionDao.fromSession(it) })
+//            .remove("\uD83E\uDD5E")
+        Timber.e("WC sessions, saving following json: $json")
         context.rewriteFile(json, FILE_NAME_PREFIX_SESSIONS)
     }
 
