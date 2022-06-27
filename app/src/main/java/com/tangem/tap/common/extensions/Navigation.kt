@@ -18,6 +18,7 @@ import com.tangem.tap.features.onboarding.products.note.OnboardingNoteFragment
 import com.tangem.tap.features.onboarding.products.otherCards.OnboardingOtherCardsFragment
 import com.tangem.tap.features.onboarding.products.twins.ui.TwinsCardsFragment
 import com.tangem.tap.features.onboarding.products.wallet.ui.OnboardingWalletFragment
+import com.tangem.tap.features.security.SecurityFragment
 import com.tangem.tap.features.send.ui.SendFragment
 import com.tangem.tap.features.shop.ui.ShopFragment
 import com.tangem.tap.features.tokens.addCustomToken.AddCustomTokenFragment
@@ -89,7 +90,8 @@ private fun fragmentFactory(screen: AppScreen): Fragment {
         AppScreen.Send -> SendFragment()
         AppScreen.Details -> DetailsFragment()
         AppScreen.DetailsConfirm -> DetailsConfirmFragment()
-        AppScreen.DetailsSecurity -> DetailsSecurityFragment()
+        AppScreen.DetailsSecurity -> SecurityFragment()
+        AppScreen.DetailsAccessMethod -> DetailsSecurityFragment()
         AppScreen.Disclaimer -> DisclaimerFragment()
         AppScreen.AddTokens -> AddTokensFragment()
         AppScreen.AddCustomToken -> AddCustomTokenFragment()
