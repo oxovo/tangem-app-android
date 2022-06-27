@@ -191,4 +191,5 @@
     <string name="security_and_privacy_title">Security and privacy</string>
     <string name="security_group_subtitle">Security</string>
     <string name="security_change_access_method">Change access method</string>
+    <string name="security_change_access_code">Change access code</string>
 </resources>

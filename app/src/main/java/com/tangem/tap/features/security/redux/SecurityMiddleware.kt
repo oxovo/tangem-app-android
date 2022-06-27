@@ -23,6 +23,12 @@ private val securityMiddleware: Middleware<AppState> = { dispatch, state ->
                 is SecurityAction.ChangeAccessMethod -> {
                     store.dispatch(NavigationAction.NavigateTo(AppScreen.DetailsAccessMethod))
                 }
+                is SecurityAction.ChangeAccessCode -> {
+                    val cardId = store.state.detailsState.scanResponse?.card?.cardId
+                    scope.launch {
+                        tangemSdkManager.setAccessCode(cardId)
+                    }
+                }
             }
 
             next(action)

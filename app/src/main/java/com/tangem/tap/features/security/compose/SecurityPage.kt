@@ -47,6 +47,11 @@ fun SecurityPage(onChangeAccessMethodClick: () -> Unit, onChangeAccessCodeClick:
                 onItemClick = onChangeAccessMethodClick,
                 title = stringResource(R.string.security_change_access_method)
             )
+
+            SecurityItem(
+                onItemClick = onChangeAccessCodeClick,
+                title = stringResource(R.string.security_change_access_code)
+            )
         }
     }
 }
