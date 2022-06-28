@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontFamily.Companion
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tangem.tap.common.compose.CaptionText
 import com.tangem.tap.common.compose.Toolbar
@@ -20,7 +23,10 @@ import com.tangem.wallet.R
 import com.tangem.wallet.R.color
 
 @Composable
-fun SecurityPage(onChangeAccessMethodClick: () -> Unit, onChangeAccessCodeClick: () -> Unit, onBackClickListener: () -> Unit) {
+fun SecurityPage(
+    onChangeAccessMethodClick: () -> Unit,
+    onBackClickListener: () -> Unit
+) {
     Scaffold(
         topBar = {
             Toolbar(
@@ -38,6 +44,7 @@ fun SecurityPage(onChangeAccessMethodClick: () -> Unit, onChangeAccessCodeClick:
         ) {
             CaptionText(
                 text = stringResource(R.string.security_group_subtitle),
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 16.dp)

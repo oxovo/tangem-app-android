@@ -89,7 +89,7 @@
     <string name="details_section_title_settings">Settings</string>
     <string name="details_section_title_card">Card</string>
     <string name="details_row_title_validate">Validate card</string>
-    <string name="details_row_title_manage_security">Manage Security</string>
+    <string name="details_row_title_manage_security">Security &amp; Privacy</string>
     <string name="details_row_title_erase_wallet">Erase wallet</string>
     <string name="details_erase_wallet_warning">This action is irreversible. If, after deleting the wallet, someone sends funds to it, then you will not be able to withdraw them.</string>
     <string name="details_security_management_warning">If you forget the code, you will lose the ability to use the card. There is no way to recover or change your code if you lose it.</string>
@@ -188,7 +188,7 @@
     <string name="details_notification_erase_wallet_not_possible">Your balance on this wallet is not zero, or you have unconfirmed transactions</string>
     <string name="details_notification_security_option_already_active">This is the currently active option</string>
 
-    <string name="security_and_privacy_title">Security and privacy</string>
+    <string name="security_and_privacy_title">Security &amp; Privacy</string>
     <string name="security_group_subtitle">Security</string>
     <string name="security_change_access_method">Change access method</string>
 </resources>
