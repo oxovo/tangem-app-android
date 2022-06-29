@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontFamily.Companion
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tangem.tap.common.compose.CaptionText
 import com.tangem.tap.common.compose.Toolbar
@@ -24,8 +25,8 @@ import com.tangem.wallet.R.color
 
 @Composable
 fun SecurityPage(
-    onChangeAccessMethodClick: () -> Unit,
-    onBackClickListener: () -> Unit
+    onChangeAccessMethodClick: () -> Unit = {},
+    onBackClickListener: () -> Unit ={}
 ) {
     Scaffold(
         topBar = {
@@ -67,4 +68,10 @@ private fun SecurityItem(onItemClick: () -> Unit, title: String) {
     ) {
         Text(text = title, modifier = Modifier.padding(16.dp))
     }
+}
+
+@Preview
+@Composable
+fun SecurityPagePreview() {
+    SecurityPage()
 }

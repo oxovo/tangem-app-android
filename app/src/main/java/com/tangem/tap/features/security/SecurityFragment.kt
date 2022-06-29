@@ -27,7 +27,6 @@ class SecurityFragment : Fragment(), StoreSubscriber<SecurityState> {
                 AppCompatTheme {
                     SecurityPage(
                         onChangeAccessMethodClick = { store.dispatch(SecurityAction.ChangeAccessMethod) },
-                        onChangeAccessCodeClick = { store.dispatch(SecurityAction.ChangeAccessCode) },
                         onBackClickListener = { store.dispatch(NavigationAction.PopBackTo()) }
                     )
                 }
