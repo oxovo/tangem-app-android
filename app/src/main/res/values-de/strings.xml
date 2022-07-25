@@ -79,7 +79,7 @@
     <string name="details_row_title_manage_security">Sicherheit verwalteny</string>
     <string name="details_row_title_erase_wallet">Wallet löschen</string>
     <string name="details_erase_wallet_warning">Dieser Vorgang ist irriversibel. Wenn jemand nach dem Löschen des Wallets Geld überweist, können Sie es nicht mehr abheben.</string>
-    <string name="details_security_management_warning">Sollten Sie den Code verloren haben, haben Sie keinen Zugriff auf die Karte. Sie können Ihren Code nicht wiederherstellen und nicht ändern, wenn Sie ihn verlieren.</string>
+    <string name="details_security_management_warning">If you forget the code you will lose access to your funds. Сode recovery is not possible.</string>
     <string name="details_manage_security_title">Sicherheit verwalten</string>
     <string name="details_manage_security_long_tap">Langes Tippen</string>
     <string name="details_manage_security_long_tap_description">Dieser Mechanismus schützt vor Annäherungsangriffen auf eine Karte. Es wird eine Verzögerung zwischen dem Empfang und der Ausführung eines Befehls erzwungen. Nach der ersten signierten Transaktion wird dieses Telefon mit der Karte verknüpft und die Transaktionen werden sofort signiert</string>

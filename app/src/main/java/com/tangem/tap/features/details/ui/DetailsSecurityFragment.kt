@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.transition.TransitionInflater
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.tangem.common.card.Card
+import com.tangem.tap.common.extensions.getDrawableCompat
 import com.tangem.tap.common.extensions.show
 import com.tangem.tap.common.redux.navigation.NavigationAction
 import com.tangem.tap.features.details.redux.DetailsAction
@@ -16,7 +17,7 @@ import com.tangem.tap.store
 import com.tangem.wallet.R
 import com.tangem.wallet.databinding.FragmentDetailsSecurityBinding
 import org.rekotlin.StoreSubscriber
-import java.util.*
+import java.util.EnumSet
 
 class DetailsSecurityFragment : Fragment(R.layout.fragment_details_security),
         StoreSubscriber<DetailsState> {
@@ -71,6 +72,8 @@ class DetailsSecurityFragment : Fragment(R.layout.fragment_details_security),
         if (activity == null || view == null) return
 
         selectSecurityOption(state.securityScreenState?.selectedOption)
+        updateSaveChangesButtoState(state.securityScreenState?.selectedOption)
+
         for (option in SecurityOption.values()) {
             setupOption(
                     option,
@@ -81,6 +84,20 @@ class DetailsSecurityFragment : Fragment(R.layout.fragment_details_security),
         binding.tvAccessCodeUnavailableDisclaimer.show(
             state.scanResponse?.card?.backupStatus == Card.BackupStatus.NoBackup
         )
+    }
+
+    private fun updateSaveChangesButtoState(selectedOption: SecurityOption?) = with(binding) {
+        when (selectedOption) {
+            SecurityOption.LongTap -> {
+                btnSaveChanges.setText(R.string.common_save_changes)
+                btnSaveChanges.icon = btnSaveChanges.context.getDrawableCompat(R.drawable.ic_save)
+            }
+            SecurityOption.PassCode, SecurityOption.AccessCode -> {
+                btnSaveChanges.setText(R.string.common_continue)
+                btnSaveChanges.icon = null
+            }
+            null -> return@with
+        }
     }
 
     private fun selectSecurityOption(securityOption: SecurityOption?) = with(binding) {

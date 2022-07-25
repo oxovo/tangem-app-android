@@ -79,7 +79,7 @@
     <string name="details_row_title_manage_security">Gestione del portafoglio</string>
     <string name="details_row_title_erase_wallet">Cancella il portafoglio</string>
     <string name="details_erase_wallet_warning">Questa azione è irreversibile. Se dopo aver eliminato il portafoglio qualcuno invia dei fondi, non potrai ritirarli.</string>
-    <string name="details_security_management_warning">Se dimentichi il codice, perderai la possibilità di utilizzare la carta. Non è possibile in alcun modo ripristinare o modificare il codice se lo perdi.</string>
+    <string name="details_security_management_warning">If you forget the code you will lose access to your funds. Сode recovery is not possible.</string>
     <string name="details_manage_security_title">Gestione della sicurezza</string>
     <string name="details_manage_security_long_tap">Mantenimento della carta</string>
     <string name="details_manage_security_long_tap_description">Questo meccanismo protegge dagli avvicinamenti senza contatto sulla carta. Attiva un ritardo tra la ricezione e l\'esecuzione di un comando. Dopo la prima transazione firmata, questo telefono verrà associato alla carta e le transazioni verranno firmate immediatamente.</string>

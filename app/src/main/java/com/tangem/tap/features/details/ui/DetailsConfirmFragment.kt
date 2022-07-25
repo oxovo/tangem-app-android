@@ -76,13 +76,9 @@ class DetailsConfirmFragment : Fragment(R.layout.fragment_details_confirm),
             ConfirmScreenState.PassCode -> {
                 toolbar.title = getString(R.string.details_manage_security_title)
                 tvWarningDescription.text = getString(R.string.details_security_management_warning)
-                btnConfirm.text = getString(R.string.common_save_changes)
-                btnConfirm.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    null, null, getDrawable(R.drawable.ic_save), null
-                )
+                btnConfirm.text = getString(R.string.common_continue)
                 btnConfirm.setOnClickListener { store.dispatch(DetailsAction.ManageSecurity.SaveChanges) }
             }
         }
     }
-
 }

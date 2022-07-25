@@ -91,7 +91,7 @@
     <string name="details_row_title_manage_security">Manage Security</string>
     <string name="details_row_title_erase_wallet">Erase wallet</string>
     <string name="details_erase_wallet_warning">This action is irreversible. If, after deleting the wallet, someone sends funds to it, then you will not be able to withdraw them.</string>
-    <string name="details_security_management_warning">If you forget the code, you will lose the ability to use the card. There is no way to recover or change your code if you lose it.</string>
+    <string name="details_security_management_warning">If you forget the code you will lose access to your funds. Сode recovery is not possible.</string>
     <string name="details_manage_security_title">Manage Security</string>
     <string name="details_manage_security_long_tap">Long Tap</string>
     <string name="details_manage_security_long_tap_description">This mechanism protects against proximity attack on a card. It will enforce a delay between reception and execution of a command. After the first signed transaction this phone will be linked with the card and transactions will be signed immediately.</string>

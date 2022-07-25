@@ -80,7 +80,7 @@
     <string name="details_row_title_manage_security">Gestion de la sécurité</string>
     <string name="details_row_title_erase_wallet">Annuler le portefeuille</string>
     <string name="details_erase_wallet_warning">Cette action est irréversible. Si, après avoir annulé le portefeuille, quelqu\'un lui envoie des fonds, vous ne pourrez pas les retirer.</string>
-    <string name="details_security_management_warning">Si vous oubliez le code, vous perdrez la possibilité d\'utiliser la carte. Si vous perdez le code, il sera impossible de le restaurer ou modifier.</string>
+    <string name="details_security_management_warning">If you forget the code you will lose access to your funds. Сode recovery is not possible.</string>
     <string name="details_manage_security_title">Gestion de la sécurité</string>
     <string name="details_manage_security_long_tap">Tenez la carte fermement</string>
     <string name="details_manage_security_long_tap_description">Ce mécanisme protège contre les attaques sans contact sur la carte. Il y a un délai entre la réception et l\'exécution de la commande. Après la première transaction signée, ce téléphone sera associé à la carte et les transactions seront signées immédiatement.</string>

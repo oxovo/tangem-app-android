@@ -80,7 +80,7 @@
     <string name="details_row_title_manage_security">Управление безопасностью</string>
     <string name="details_row_title_erase_wallet">Удалить кошелек</string>
     <string name="details_erase_wallet_warning">Это действие необратимо. Если после удаления кошелька кто-то отправит на него средства, то Вы не сможете их вывести.</string>
-    <string name="details_security_management_warning">Если вы забудете код, Вы потеряете возможность использовать карту. Невозможно восстановить или изменить код, если вы его потеряете.</string>
+    <string name="details_security_management_warning">Если вы забудете код, то потеряете доступ к своим средствам. Восстановление кода невозможно.</string>
     <string name="details_manage_security_title">Управление безопасностью</string>
     <string name="details_manage_security_long_tap">Длительное удержание</string>
     <string name="details_manage_security_long_tap_description">Этот механизм защищает карту от бесконтактной атаки. Это обеспечит задержку между приемом и выполнением команды. После первой подписанной транзакции этот телефон будет привязан к карте, и транзакции будут подписаны без задержки.</string>
